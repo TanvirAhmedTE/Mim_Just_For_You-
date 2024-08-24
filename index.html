@@ -102,7 +102,10 @@
             bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
-            z-index: 4;
+            z-index: 5; /* Ensure this is higher than other elements */
+            background-color: rgba(255, 0, 0, 0.5); /* Semi-transparent red background */
+            padding: 10px;
+            border-radius: 5px;
         }
 
         .button-container a {
@@ -141,7 +144,7 @@
         <img src="right-heart.png" class="right-part" id="rightHeart">
     </div>
 
-    <div class="message-box" id="messageBox">
+    <div class="message-box" id="messageBox">      
         <p>💔Mim💔<br>💔🥀I will miss you🥀💔</p>
     </div>
 
