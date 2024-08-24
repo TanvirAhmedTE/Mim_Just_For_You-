@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Emotional Image Gallery</title>
     <style>
+        /* Basic Reset and Styling */
         body {
             margin: 0;
             padding: 0;
@@ -17,6 +18,18 @@
             align-items: center;
             height: 100vh;
             position: relative;
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.7), inset 0 0 50px rgba(255, 0, 0, 0.2);
+            animation: flicker 5s infinite;
+        }
+
+        /* Dynamic Lighting Effects */
+        @keyframes flicker {
+            0%, 100% {
+                box-shadow: 0 0 30px rgba(255, 0, 0, 0.7), inset 0 0 50px rgba(255, 0, 0, 0.2);
+            }
+            50% {
+                box-shadow: 0 0 50px rgba(255, 0, 0, 1), inset 0 0 80px rgba(255, 0, 0, 0.4);
+            }
         }
 
         /* Full-screen image container */
@@ -29,44 +42,37 @@
             background-size: cover;
             background-position: center;
             z-index: -1;
-            animation: zoomEffect 4s ease-in-out infinite;
+            animation: glitchTransition 4s ease-in-out infinite;
         }
 
-        @keyframes zoomEffect {
+        @keyframes glitchTransition {
             0% {
-                transform: scale(1.1);
-                filter: blur(2px);
+                opacity: 1;
+                transform: skewX(0deg);
             }
             50% {
-                transform: scale(1);
-                filter: blur(0);
+                opacity: 0;
+                transform: skewX(10deg);
             }
             100% {
-                transform: scale(1.1);
-                filter: blur(2px);
+                opacity: 1;
+                transform: skewX(0deg);
             }
         }
 
-        /* Glitch Effect */
-        @keyframes glitchEffect {
-            0% {
-                clip: rect(42px, 9999px, 44px, 0);
-            }
-            25% {
-                clip: rect(85px, 9999px, 12px, 0);
-            }
-            50% {
-                clip: rect(28px, 9999px, 92px, 0);
-            }
-            75% {
-                clip: rect(48px, 9999px, 22px, 0);
-            }
-            100% {
-                clip: rect(65px, 9999px, 75px, 0);
-            }
+        /* Glowing Cursor Effect */
+        #cursor {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle, #ff4444, transparent);
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            z-index: 6;
         }
 
-        /* Rain Effect */
+        /* Rain effect */
         .rain {
             position: fixed;
             top: 0;
@@ -79,7 +85,7 @@
             pointer-events: none;
         }
 
-        /* Fog Effect */
+        /* Fog effect */
         .fog {
             position: fixed;
             top: 0;
@@ -141,6 +147,9 @@
     <div class="petal" style="left: 60%; animation-delay: 4s;"></div>
     <div class="petal" style="left: 80%; animation-delay: 6s;"></div>
 
+    <!-- Glowing Cursor -->
+    <div id="cursor"></div>
+
     <!-- Background music -->
     <audio id="backgroundMusic" autoplay loop>
         <source src="sad_image_background.mp3" type="audio/mpeg">
@@ -149,7 +158,9 @@
 
     <script>
         const imageContainer = document.getElementById('image-container');
+        const cursor = document.getElementById('cursor');
 
+        // Image gallery
         const images = [
             "image1.jpg",
             "image2.jpg",
@@ -167,13 +178,17 @@
 
         function changeImage() {
             imageContainer.style.backgroundImage = `url('${images[currentImageIndex]}')`;
-            imageContainer.style.animation = "glitchEffect 1s infinite alternate";
-            setTimeout(() => imageContainer.style.animation = "", 500); // Glitch effect applied for half a second
             currentImageIndex = (currentImageIndex + 1) % images.length;
         }
 
         setInterval(changeImage, 4000); // Change every 4 seconds
         changeImage(); // Set the initial background
+
+        // Cursor effect
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = `${e.clientX}px`;
+            cursor.style.top = `${e.clientY}px`;
+        });
     </script>
 
 </body>
