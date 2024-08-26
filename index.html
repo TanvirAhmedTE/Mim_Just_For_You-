@@ -12,12 +12,12 @@
         body, html {
             margin: 0;
             padding: 0;
-            overflow: hidden;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
             background: #000;
         }
 
@@ -32,8 +32,6 @@
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            transition: background 1.5s ease-in-out;
-            background-attachment: fixed;
         }
 
         /* Heart Container */
@@ -43,22 +41,18 @@
             justify-content: center;
             align-items: center;
             gap: 20px;
-            filter: blur(2px) brightness(0.8);
-            transition: filter 1s ease-in-out;
+            transition: transform 1s ease-in-out;
         }
 
         .heart-container img {
             width: 150px;
-        }
-
-        .heart-container.active img {
-            filter: blur(0) brightness(1.2);
+            transition: transform 1s ease-in-out;
         }
 
         /* Message Box */
         .message-box {
             position: absolute;
-            top: 60%;
+            top: 55%;
             text-align: center;
             font-size: 24px;
             color: #fff;
@@ -74,13 +68,14 @@
         /* Button Container */
         .button-container {
             position: absolute;
-            top: 75%;
+            top: 70%;
             width: 100%;
             text-align: center;
+            display: flex;
+            justify-content: center;
         }
 
         .button-container a {
-            display: inline-block;
             padding: 15px 30px;
             background: #ff4444;
             color: white;
@@ -89,9 +84,8 @@
             border-radius: 5px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.7);
             transition: background 0.3s, transform 0.3s;
-            width: 100%;
+            width: 90%;
             max-width: 600px;
-            margin: 0 auto;
             text-align: center;
         }
 
@@ -145,6 +139,15 @@
 
         .control-button:active {
             transform: scale(0.95);
+        }
+
+        /* Heart Animation */
+        .left-part.active {
+            transform: translateX(-80px) rotate(-20deg);
+        }
+
+        .right-part.active {
+            transform: translateX(80px) rotate(20deg);
         }
     </style>
 </head>
