@@ -32,25 +32,6 @@
             }
         }
 
-        /* Pulsing Dark Shadow Borders */
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            box-shadow: inset 0 0 50px 30px rgba(0, 0, 0, 0.9);
-            animation: pulseShadow 8s infinite;
-            z-index: 2;
-            pointer-events: none;
-        }
-
-        @keyframes pulseShadow {
-            0%, 100% { box-shadow: inset 0 0 50px 30px rgba(0, 0, 0, 0.9); }
-            50% { box-shadow: inset 0 0 70px 40px rgba(0, 0, 0, 1); }
-        }
-
         /* Full-screen image container */
         #image-container {
             position: fixed;
@@ -62,6 +43,7 @@
             background-position: center;
             z-index: -1;
             animation: glitchTransition 5s ease-in-out infinite;
+            transition: opacity 1s ease-in-out;
         }
 
         @keyframes glitchTransition {
@@ -79,16 +61,21 @@
             }
         }
 
-        /* Glowing Cursor Effect */
+        /* Custom Text Cursor */
         #cursor {
             position: absolute;
-            width: 30px;
-            height: 30px;
-            background: radial-gradient(circle, #ff4444, transparent);
-            border-radius: 50%;
+            font-size: 24px;
+            color: #ff4444;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 5px;
+            border-radius: 5px;
+            white-space: nowrap;
             pointer-events: none;
-            transform: translate(-50%, -50%);
             z-index: 6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Arial', sans-serif;
         }
 
         /* Rain effect */
@@ -147,51 +134,47 @@
             }
         }
 
-        /* Music Control Panel */
-        #musicControl {
+        /* Invisible play button */
+        .play-button {
             position: fixed;
-            top: 10px;
-            right: 10px;
-            background: rgba(0, 0, 0, 0.5);
-            padding: 10px;
-            border-radius: 5px;
-            display: none;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             z-index: 10;
-        }
-
-        #musicControl button {
             background: transparent;
-            border: none;
-            color: #fff;
-            font-size: 20px;
             cursor: pointer;
         }
 
-        #musicControl button:hover {
-            color: #ff4444;
-        }
-
-        /* Show control panel on hover near the top-right corner */
-        body:hover #musicControl {
-            display: block;
-        }
-
-        /* Emotional quote */
-        #emotional-quote {
+        /* Control Panel */
+        .control-panel {
             position: fixed;
-            bottom: 20%;
-            width: 100%;
-            text-align: center;
-            font-size: 24px;
-            color: rgba(255, 255, 255, 0.8);
-            font-family: 'Courier New', Courier, monospace;
-            z-index: 5;
-            animation: fadeInOut 10s infinite;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 11;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            border-radius: 5px;
         }
 
-        @keyframes fadeInOut {
-            0%, 100% { opacity: 0; }
-            30%, 70% { opacity: 1; }
+        .control-panel button {
+            background: #ff4444;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            margin: 0 5px;
+            transition: background 0.3s;
+        }
+
+        .control-panel button:hover {
+            background: #ff0000;
         }
     </style>
 </head>
@@ -213,26 +196,28 @@
     <div class="petal" style="left: 60%; animation-delay: 4s;"></div>
     <div class="petal" style="left: 80%; animation-delay: 6s;"></div>
 
-    <!-- Glowing Cursor -->
-    <div id="cursor"></div>
+    <!-- Custom Text Cursor -->
+    <div id="cursor">MT</div>
 
-    <!-- Background music with control panel -->
-    <audio id="backgroundMusic" autoplay loop>
+    <!-- Invisible play button -->
+    <div class="play-button" id="playButton"></div>
+
+    <!-- Control Panel -->
+    <div class="control-panel">
+        <button id="playPauseBtn">Play</button>
+        <button id="muteBtn">Mute</button>
+    </div>
+
+    <!-- Background music -->
+    <audio id="backgroundMusic" loop>
         <source src="sad_image_background.mp3" type="audio/mpeg">
         Your browser does not support the audio element.
     </audio>
 
-    <div id="musicControl">
-        <button id="playPauseBtn">⏸</button>
-        <button id="muteBtn">🔊</button>
-    </div>
-
-    <!-- Emotional quote -->
-    <div id="emotional-quote">"I ❤️ U Mim..."</div>
-
     <script>
         const imageContainer = document.getElementById('image-container');
         const cursor = document.getElementById('cursor');
+        const playButton = document.getElementById('playButton');
         const playPauseBtn = document.getElementById('playPauseBtn');
         const muteBtn = document.getElementById('muteBtn');
         const backgroundMusic = document.getElementById('backgroundMusic');
@@ -267,22 +252,49 @@
             cursor.style.top = `${e.clientY}px`;
         });
 
-        // Music control panel functionality
-        playPauseBtn.addEventListener('click', () => {
+        // Play background music
+        function playMusic() {
             if (backgroundMusic.paused) {
                 backgroundMusic.play();
-                playPauseBtn.textContent = '⏸'; // Change to pause icon
-            } else {
+            }
+        }
+
+        function pauseMusic() {
+            if (!backgroundMusic.paused) {
                 backgroundMusic.pause();
-                playPauseBtn.textContent = '▶️'; // Change to play icon
+            }
+        }
+
+        function toggleMute() {
+            backgroundMusic.muted = !backgroundMusic.muted;
+            muteBtn.textContent = backgroundMusic.muted ? 'Unmute' : 'Mute';
+        }
+
+        // Attempt to play music automatically
+        document.addEventListener('DOMContentLoaded', () => {
+            playMusic();
+        });
+
+        // Play music on any screen touch/click
+        playButton.addEventListener('click', playMusic);
+
+        // Control panel functionality
+        playPauseBtn.addEventListener('click', () => {
+            if (backgroundMusic.paused) {
+                playMusic();
+                playPauseBtn.textContent = 'Pause';
+            } else {
+                pauseMusic();
+                playPauseBtn.textContent = 'Play';
             }
         });
 
-        muteBtn.addEventListener('click', () => {
-            backgroundMusic.muted = !backgroundMusic.muted;
-            muteBtn.textContent = backgroundMusic.muted ? '🔇' : '🔊'; // Change icon based on mute status
-        });
+        muteBtn.addEventListener('click', toggleMute);
+
+        // Ensure the play button is invisible
+        playButton.style.display = 'none';
     </script>
 
 </body>
-</html> 
+
+    </html>
