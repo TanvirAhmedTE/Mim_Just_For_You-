@@ -34,6 +34,36 @@
             background-repeat: no-repeat;
         }
 
+        /* Header Text with Typing Effect */
+        .header-text {
+            position: absolute;
+            top: 10%;
+            width: 100%;
+            text-align: center;
+            font-size: 28px;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+            white-space: nowrap;
+            overflow: hidden;
+            border-right: 4px solid rgba(255, 255, 255, 0.8);
+            box-sizing: border-box;
+            animation: typing 5s steps(50, end), blink-caret 1s step-end infinite;
+        }
+
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: rgba(255, 255, 255, 0.8); }
+        }
+
+        .header-text.hidden {
+            display: none;
+        }
+
         /* Heart Container */
         .heart-container {
             position: relative;
@@ -156,6 +186,9 @@
     <!-- Background images container -->
     <div id="background"></div>
 
+    <!-- Header Text with Typing Effect -->
+    <div class="header-text" id="headerText">🥰Sweetheart🥰, Tap On The Heart🥰</div>
+
     <!-- Heart Animation -->
     <div class="heart-container" id="heartContainer">
         <img src="left-heart.png" class="left-part" id="leftHeart">
@@ -194,6 +227,7 @@
         const background = document.getElementById('background');
         const toggleMusic = document.getElementById('toggleMusic');
         const musicIcon = document.getElementById('musicIcon');
+        const headerText = document.getElementById('headerText');
 
         const backgrounds = [
             "background1.jpg",
@@ -224,20 +258,25 @@
             setTimeout(() => {
                 messageBox.classList.add('active');
             }, 2000); // Message box appears 2 seconds after heart breaks
+
+            // Hide the header text
+            headerText.classList.add('hidden');
         });
 
         toggleMusic.addEventListener('click', () => {
             if (isPlaying) {
                 backgroundMusic.pause();
                 toggleMusic.title = "Play Music";
-                musicIcon.className = "fas fa-play"; // Play Icon
-            } else {
-                backgroundMusic.play();
-                toggleMusic.title = "Pause Music";
                 musicIcon.className = "fas fa-pause"; // Pause Icon
             }
             isPlaying = !isPlaying;
         });
+
+        // Ensure the icon matches the state if music ends
+        backgroundMusic.addEventListener('ended', () => {
+            musicIcon.className = "fas fa-play";
+            isPlaying = false;
+        });
     </script>
 </body>
-    </html>
+        </html>
