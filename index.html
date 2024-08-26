@@ -4,133 +4,147 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Emotional Page</title>
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
     <style>
-        body {
+        /* Global Styling */
+        body, html {
             margin: 0;
             padding: 0;
             overflow: hidden;
-            font-family: 'Arial', sans-serif;
-            background-color: #000;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            position: relative;
+            background: #000;
         }
 
-        /* Background image container */
+        /* Background Container */
         #background {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
+            z-index: -3;
             background-size: cover;
             background-position: center;
-            z-index: -1;
-            animation: fade 6s infinite;
+            background-repeat: no-repeat;
+            transition: background 1.5s ease-in-out;
+            background-attachment: fixed;
         }
 
-        @keyframes fade {
-            0% { opacity: 1; }
-            33% { opacity: 0; }
-            66% { opacity: 1; }
-        }
-
-        /* Broken heart container */
+        /* Heart Container */
         .heart-container {
             position: relative;
-            width: 200px; /* Increased the heart size */
-            height: 200px; /* Increased the heart size */
-            cursor: pointer;
-            z-index: 2;
-            animation: pulse 2s infinite;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            filter: blur(2px) brightness(0.8);
+            transition: filter 1s ease-in-out;
         }
 
         .heart-container img {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            transition: transform 2s ease-in-out;
+            width: 150px;
         }
 
-        /* Initial state where both parts look like a complete heart */
-        .left-part, .right-part {
-            transform: translateX(0);
+        .heart-container.active img {
+            filter: blur(0) brightness(1.2);
         }
 
-        /* When clicked, the heart breaks apart */
-        .left-part.active {
-            transform: translateX(-150%);
-        }
-
-        .right-part.active {
-            transform: translateX(150%);
-        }
-
-        /* Emotional text box */
+        /* Message Box */
         .message-box {
             position: absolute;
             top: 60%;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 20px;
-            background: rgba(255, 0, 0, 0.2); /* Transparent bloody background */
-            border-radius: 10px;
-            opacity: 0;
-            transition: opacity 1s ease-in-out;
-            z-index: 3;
             text-align: center;
-        }
-
-        .message-box p {
-            margin: 0;
             font-size: 24px;
-            font-weight: bold;
-            color: #ff0000;
-            font-family: 'Courier New', monospace;
-            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.8);
+            color: #fff;
+            opacity: 0;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+            transition: opacity 2s ease-in-out;
         }
 
         .message-box.active {
             opacity: 1;
         }
 
-        /* Button for navigating to the images page */
+        /* Button Container */
         .button-container {
             position: absolute;
-            bottom: 80px; /* Adjusted to move the button up */
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 5; /* Ensure this is higher than other elements */
-            background-color: rgba(255, 0, 0, 0.5); /* Semi-transparent red background */
-            padding: 10px;
-            border-radius: 5px;
+            top: 75%;
+            width: 100%;
+            text-align: center;
         }
 
         .button-container a {
-            text-decoration: none;
-            font-size: 18px;
-            padding: 10px 20px;
-            background: #ff0000;
+            display: inline-block;
+            padding: 15px 30px;
+            background: #ff4444;
             color: white;
+            font-size: 18px;
+            text-decoration: none;
             border-radius: 5px;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.7);
-            transition: background 0.3s;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.7);
+            transition: background 0.3s, transform 0.3s;
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
         }
 
         .button-container a:hover {
-            background: #ff4444;
+            background: #ff6666;
+            transform: scale(1.05);
         }
 
-        /* Animation keyframes */
-        @keyframes pulse {
-            0%, 100% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.1);
-            }
+        /* Music Control Panel */
+        .music-control {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 12px;
+            border-radius: 50px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(8px);
+            transition: background 0.3s;
+        }
+
+        .music-control:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .control-button {
+            background: none;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            outline: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .control-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(255, 255, 255, 0.2);
+        }
+
+        .control-button i {
+            color: white;
+            font-size: 24px;
+        }
+
+        .control-button:active {
+            transform: scale(0.95);
         }
     </style>
 </head>
@@ -139,19 +153,30 @@
     <!-- Background images container -->
     <div id="background"></div>
 
+    <!-- Heart Animation -->
     <div class="heart-container" id="heartContainer">
         <img src="left-heart.png" class="left-part" id="leftHeart">
         <img src="right-heart.png" class="right-part" id="rightHeart">
     </div>
 
+    <!-- Message Box -->
     <div class="message-box" id="messageBox">
         <p>💔Mim💔<br>💔🥀I will miss you🥀💔</p>
     </div>
 
+    <!-- Button Container -->
     <div class="button-container">
         <a href="images.html">👉Click Here Sweetheart❤️</a>
     </div>
 
+    <!-- Music Control Panel -->
+    <div class="music-control">
+        <button id="toggleMusic" class="control-button" title="Play Music">
+            <i id="musicIcon" class="fas fa-play"></i>
+        </button>
+    </div>
+
+    <!-- Background Music -->
     <audio id="backgroundMusic">
         <source src="sad_background.mp3" type="audio/mpeg">
         Your browser does not support the audio element.
@@ -164,6 +189,8 @@
         const messageBox = document.getElementById('messageBox');
         const backgroundMusic = document.getElementById('backgroundMusic');
         const background = document.getElementById('background');
+        const toggleMusic = document.getElementById('toggleMusic');
+        const musicIcon = document.getElementById('musicIcon');
 
         const backgrounds = [
             "background1.jpg",
@@ -172,6 +199,7 @@
         ];
 
         let currentBackgroundIndex = 0;
+        let isPlaying = false;
 
         function changeBackground() {
             background.style.backgroundImage = `url('${backgrounds[currentBackgroundIndex]}')`;
@@ -194,7 +222,19 @@
                 messageBox.classList.add('active');
             }, 2000); // Message box appears 2 seconds after heart breaks
         });
-    </script>
 
+        toggleMusic.addEventListener('click', () => {
+            if (isPlaying) {
+                backgroundMusic.pause();
+                toggleMusic.title = "Play Music";
+                musicIcon.className = "fas fa-play"; // Play Icon
+            } else {
+                backgroundMusic.play();
+                toggleMusic.title = "Pause Music";
+                musicIcon.className = "fas fa-pause"; // Pause Icon
+            }
+            isPlaying = !isPlaying;
+        });
+    </script>
 </body>
-        </html>
+    </html>
