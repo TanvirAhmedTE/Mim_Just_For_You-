@@ -35,35 +35,43 @@
         }
 
         /* Header Text with Typing Effect */
-        .header-text {
-            position: absolute;
-            top: 10%;
-            width: 100%;
-            text-align: center;
-            font-size: 28px;
-            color: #fff;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
-            white-space: nowrap;
-            overflow: hidden;
-            border-right: 4px solid rgba(255, 255, 255, 0.8);
-            box-sizing: border-box;
-            animation: typing 5s steps(50, end), blink-caret 1s step-end infinite;
-        }
+.header-text {
+    position: absolute;
+    top: 10%;
+    left: 0;
+    width: 100%; /* Full width of the screen */
+    text-align: center;
+    font-size: 5vw; /* Responsive font size */
+    color: #fff;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+    box-sizing: border-box;
+    animation: typing 5s steps(50, end), blink-caret 1s step-end infinite;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 
-        @keyframes typing {
-            from { width: 0 }
-            to { width: 100% }
-        }
+@keyframes typing {
+    from { width: 0 }
+    to { width: 100% }
+}
 
-        @keyframes blink-caret {
-            from, to { border-color: transparent }
-            50% { border-color: rgba(255, 255, 255, 0.8); }
-        }
+@keyframes blink-caret {
+    from, to { border-color: transparent }
+    50% { border-color: rgba(255, 255, 255, 0.8); }
+}
 
-        .header-text.hidden {
-            display: none;
-        }
+.header-text.hidden {
+    display: none;
+}
 
+/* Adjustments for very small screens */
+@media (max-width: 480px) {
+    .header-text {
+        font-size: 6vw; /* Adjust font size for smaller screens */
+    }
+}
+    
         /* Heart Container */
         .heart-container {
             position: relative;
@@ -186,8 +194,9 @@
     <!-- Background images container -->
     <div id="background"></div>
 
-    <!-- Header Text with Typing Effect -->
-    <div class="header-text" id="headerText">🥰Sweetheart🥰, Tap On The Heart🥰</div>
+    <div class="header-text" id="headerText">
+    🥰Sweetheart🥰<br>🥰Tap On The Heart🥰
+    </div>
 
     <!-- Heart Animation -->
     <div class="heart-container" id="heartContainer">
