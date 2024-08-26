@@ -32,6 +32,25 @@
             }
         }
 
+        /* Pulsing Dark Shadow Borders */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            box-shadow: inset 0 0 50px 30px rgba(0, 0, 0, 0.9);
+            animation: pulseShadow 8s infinite;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        @keyframes pulseShadow {
+            0%, 100% { box-shadow: inset 0 0 50px 30px rgba(0, 0, 0, 0.9); }
+            50% { box-shadow: inset 0 0 70px 40px rgba(0, 0, 0, 1); }
+        }
+
         /* Full-screen image container */
         #image-container {
             position: fixed;
@@ -42,7 +61,7 @@
             background-size: cover;
             background-position: center;
             z-index: -1;
-            animation: glitchTransition 4s ease-in-out infinite;
+            animation: glitchTransition 5s ease-in-out infinite;
         }
 
         @keyframes glitchTransition {
@@ -63,8 +82,8 @@
         /* Glowing Cursor Effect */
         #cursor {
             position: absolute;
-            width: 20px;
-            height: 20px;
+            width: 30px;
+            height: 30px;
             background: radial-gradient(circle, #ff4444, transparent);
             border-radius: 50%;
             pointer-events: none;
@@ -127,6 +146,53 @@
                 transform: translateY(100vh) rotate(360deg);
             }
         }
+
+        /* Music Control Panel */
+        #musicControl {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 5px;
+            display: none;
+            z-index: 10;
+        }
+
+        #musicControl button {
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        #musicControl button:hover {
+            color: #ff4444;
+        }
+
+        /* Show control panel on hover near the top-right corner */
+        body:hover #musicControl {
+            display: block;
+        }
+
+        /* Emotional quote */
+        #emotional-quote {
+            position: fixed;
+            bottom: 20%;
+            width: 100%;
+            text-align: center;
+            font-size: 24px;
+            color: rgba(255, 255, 255, 0.8);
+            font-family: 'Courier New', Courier, monospace;
+            z-index: 5;
+            animation: fadeInOut 10s infinite;
+        }
+
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0; }
+            30%, 70% { opacity: 1; }
+        }
     </style>
 </head>
 
@@ -150,15 +216,26 @@
     <!-- Glowing Cursor -->
     <div id="cursor"></div>
 
-    <!-- Background music -->
+    <!-- Background music with control panel -->
     <audio id="backgroundMusic" autoplay loop>
         <source src="sad_image_background.mp3" type="audio/mpeg">
         Your browser does not support the audio element.
     </audio>
 
+    <div id="musicControl">
+        <button id="playPauseBtn">⏸</button>
+        <button id="muteBtn">🔊</button>
+    </div>
+
+    <!-- Emotional quote -->
+    <div id="emotional-quote">"I ❤️ U Mim..."</div>
+
     <script>
         const imageContainer = document.getElementById('image-container');
         const cursor = document.getElementById('cursor');
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        const muteBtn = document.getElementById('muteBtn');
+        const backgroundMusic = document.getElementById('backgroundMusic');
 
         // Image gallery
         const images = [
@@ -181,7 +258,7 @@
             currentImageIndex = (currentImageIndex + 1) % images.length;
         }
 
-        setInterval(changeImage, 4000); // Change every 4 seconds
+        setInterval(changeImage, 5000); // Change every 5 seconds
         changeImage(); // Set the initial background
 
         // Cursor effect
@@ -189,8 +266,23 @@
             cursor.style.left = `${e.clientX}px`;
             cursor.style.top = `${e.clientY}px`;
         });
+
+        // Music control panel functionality
+        playPauseBtn.addEventListener('click', () => {
+            if (backgroundMusic.paused) {
+                backgroundMusic.play();
+                playPauseBtn.textContent = '⏸'; // Change to pause icon
+            } else {
+                backgroundMusic.pause();
+                playPauseBtn.textContent = '▶️'; // Change to play icon
+            }
+        });
+
+        muteBtn.addEventListener('click', () => {
+            backgroundMusic.muted = !backgroundMusic.muted;
+            muteBtn.textContent = backgroundMusic.muted ? '🔇' : '🔊'; // Change icon based on mute status
+        });
     </script>
 
 </body>
-
-</html>
+</html> 
